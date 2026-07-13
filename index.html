@@ -424,8 +424,8 @@
   <div class="about-wrap">
     <div class="pearl-badge">泠汐</div>
     <div class="about-text">
-      <p>筆名「絳弦」，一隻棲在網路深處的海妖。相信故事和歌一樣，是寫給願意停下來聽的人。偏愛海的顏色、珍珠的光，還有夜裡安靜的旋律。</p>
-      <p>長篇不定期詠唱更新，短篇隨潮汐上岸。歡迎來信：<strong>jiangxian0181@gmail.com</strong></p>
+      <p>筆名「泠汐」，一隻棲在網路深處的海妖。相信故事和歌一樣，是寫給願意停下來聽的人。偏愛海的顏色、珍珠的光，還有夜裡安靜的旋律。</p>
+      <p>長篇不定期詠唱更新，短篇隨潮汐上岸。想追蹤新歌或交流，歡迎來信：<strong>hello@example.com</strong></p>
     </div>
   </div>
 </section>
@@ -445,52 +445,11 @@
 
 <script>
 /* ============================================================
-   作品資料：直接編輯以下內容，換成你自己的小說即可。
-   novels  = 長篇（含章節）
-   stories = 短篇（單篇成文）
+   作品內容已移到外部檔案，更新小說「不需要」修改本檔：
+   - works.json  = 作品目錄（書名、簡介、章節清單）
+   - content/    = 每一章、每一篇 = 一個 .txt 純文字檔
    ============================================================ */
-const novels = [
-  {
-    title: "沉沒的歌劇院",
-    status: "連載中",
-    genre: "奇幻・懸疑",
-    blurb: "海底有一座從未竣工的歌劇院，每逢月圓，就會傳出無人指揮的合唱。她循著歌聲潛入，卻在第一排的座位上，看見了寫著自己名字的節目單。",
-    chapters: [
-      { name: "第一樂章　月光下的序曲", date: "2026.05.02", text: ["歌聲是從水面下傳來的。起初她以為是風，但風不會唱出和聲，更不會在同一個小節，一次又一次地停在她的名字上。", "（這是示範內文，請替換成你自己的章節文字。）"] },
-      { name: "第二樂章　空著的指揮台", date: "2026.05.16", text: ["歌劇院比傳說中更完整，也更空。唯一缺席的，是指揮。", "（示範內文，請替換。）"] },
-      { name: "第三樂章　節目單", date: "2026.06.01", text: ["節目單的最後一頁寫著：終曲，由妳完成。", "（示範內文，請替換。）"] }
-    ]
-  },
-  {
-    title: "珍珠是海的回聲",
-    status: "已完結",
-    genre: "都會・情感",
-    blurb: "調音師接下一件奇怪的委託：修復一架被海水泡過的鋼琴。琴鍵縫裡卡著一顆珍珠，而每彈一個音，珍珠就亮一次——像有人在很遠的地方，一句一句回應。全書十二章，已完結。",
-    chapters: [
-      { name: "第一樂章　走音的琴", date: "2025.09.10", text: ["那架鋼琴的音不準，準的是它發光的時機。", "（示範內文，請替換。）"] },
-      { name: "第二樂章　委託人", date: "2025.09.24", text: ["委託人只留下一句話：請把它調回那年夏天的音。", "（示範內文，請替換。）"] },
-      { name: "終樂章　回聲", date: "2026.02.14", text: ["最後一個音落下時，珍珠亮了很久，像終於說完了一句話。", "（示範內文，請替換。）"] }
-    ]
-  }
-];
-
-const stories = [
-  {
-    title: "夜光潮汐",
-    genre: "奇幻", length: "約 4,200 字", date: "2026.03.12",
-    text: ["這座城市的海，只在停電的夜晚發光。", "（這是示範內文，請替換成你自己的短篇全文。每個段落用一組引號分開即可。）"]
-  },
-  {
-    title: "只唱給一個人的歌",
-    genre: "情感", length: "約 6,800 字", date: "2026.01.30",
-    text: ["她的歌單裡有一首從未發佈的歌，播放次數：一。", "（示範內文，請替換。）"]
-  },
-  {
-    title: "耳骨上的珍珠",
-    genre: "懸疑", length: "約 3,500 字", date: "2025.12.24",
-    text: ["當鋪老闆說，這顆珍珠不能收——它到了夜裡會唱歌，唱的還是死人的聲音。", "（示範內文，請替換。）"]
-  }
-];
+let novels = [], stories = [];
 
 /* ── 以下是網站運作程式，通常不需要修改 ── */
 const finePointer = window.matchMedia("(pointer: fine)").matches;
@@ -513,39 +472,57 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
 
 const shelf = document.getElementById("novel-shelf");
 const grid = document.getElementById("story-grid");
-document.getElementById("novel-count").textContent = "共 " + novels.length + " 部";
-document.getElementById("story-count").textContent = "共 " + stories.length + " 篇";
 
-novels.forEach((n, i) => {
-  const card = document.createElement("div");
-  card.className = "novel-card";
-  card.setAttribute("role", "button");
-  card.setAttribute("tabindex", "0");
-  card.innerHTML = `
-    <h3><span class="n">♫</span>${n.title}</h3>
-    <span class="status ${n.status === "已完結" ? "done" : ""}">${n.status}</span>
-    <p class="blurb">${n.blurb}</p>
-    <p class="meta">${n.genre}　·　共 ${n.chapters.length} 章　·　最近更新 ${n.chapters[n.chapters.length-1].date}</p>`;
-  card.addEventListener("click", () => diveInto(() => openDetail(i)));
-  card.addEventListener("keydown", e => { if (e.key === "Enter") diveInto(() => openDetail(i)); });
-  enableTilt(card);
-  shelf.appendChild(card);
-});
+fetch("works.json")
+  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then(data => {
+    novels = data.novels || [];
+    stories = data.stories || [];
+    renderNovels();
+    renderStories();
+  })
+  .catch(() => {
+    const msg = '<p style="color:var(--pearl-dim); grid-column: 1 / -1;">讀不到 works.json——如果你是直接雙擊開啟本檔案，這是正常的：瀏覽器基於安全限制不允許網頁讀取本機檔案。上傳到 GitHub Pages 或 Netlify 後就會正常顯示（本機預覽方法請見「使用說明.txt」）。</p>';
+    shelf.innerHTML = msg;
+    grid.innerHTML = msg;
+  });
 
-stories.forEach((s) => {
-  const card = document.createElement("div");
-  card.className = "story-card";
-  card.setAttribute("role", "button");
-  card.setAttribute("tabindex", "0");
-  card.innerHTML = `
-    <h3>${s.title}</h3>
-    <p>${s.text[0]}</p>
-    <p class="meta">${s.genre}　·　${s.length}　·　${s.date}</p>`;
-  card.addEventListener("click", () => diveInto(() => openReader(s.title, s.genre + "　·　" + s.date, s.text, () => closeReader())));
-  card.addEventListener("keydown", e => { if (e.key === "Enter") card.click(); });
-  enableTilt(card);
-  grid.appendChild(card);
-});
+function renderNovels() {
+  document.getElementById("novel-count").textContent = "共 " + novels.length + " 部";
+  novels.forEach((n, i) => {
+    const card = document.createElement("div");
+    card.className = "novel-card";
+    card.setAttribute("role", "button");
+    card.setAttribute("tabindex", "0");
+    card.innerHTML = `
+      <h3><span class="n">♫</span>${n.title}</h3>
+      <span class="status ${n.status === "已完結" ? "done" : ""}">${n.status}</span>
+      <p class="blurb">${n.blurb}</p>
+      <p class="meta">${n.genre}　·　共 ${n.chapters.length} 章　·　最近更新 ${n.chapters.length ? n.chapters[n.chapters.length-1].date : "—"}</p>`;
+    card.addEventListener("click", () => diveInto(() => openDetail(i)));
+    card.addEventListener("keydown", e => { if (e.key === "Enter") diveInto(() => openDetail(i)); });
+    enableTilt(card);
+    shelf.appendChild(card);
+  });
+}
+
+function renderStories() {
+  document.getElementById("story-count").textContent = "共 " + stories.length + " 篇";
+  stories.forEach((s) => {
+    const card = document.createElement("div");
+    card.className = "story-card";
+    card.setAttribute("role", "button");
+    card.setAttribute("tabindex", "0");
+    card.innerHTML = `
+      <h3>${s.title}</h3>
+      <p>${s.excerpt || ""}</p>
+      <p class="meta">${s.genre}　·　${s.length}　·　${s.date}</p>`;
+    card.addEventListener("click", () => diveInto(() => openReader(s.title, s.genre + "　·　" + s.date, s.file, () => closeReader())));
+    card.addEventListener("keydown", e => { if (e.key === "Enter") card.click(); });
+    enableTilt(card);
+    grid.appendChild(card);
+  });
+}
 
 const detailOverlay = document.getElementById("detail-overlay");
 const readerOverlay = document.getElementById("reader-overlay");
@@ -569,7 +546,7 @@ function openDetail(idx) {
     const li = document.createElement("li");
     const btn = document.createElement("button");
     btn.innerHTML = `<span class="name">${c.name}</span><span class="chap-date">${c.date}</span>`;
-    btn.addEventListener("click", () => diveInto(() => openReader(c.name, n.title + "　·　" + c.date, c.text, () => closeReader())));
+    btn.addEventListener("click", () => diveInto(() => openReader(c.name, n.title + "　·　" + c.date, c.file, () => closeReader())));
     li.appendChild(btn);
     list.appendChild(li);
   });
@@ -583,18 +560,32 @@ function closeDetail() {
   if (!readerOverlay.classList.contains("open")) document.body.style.overflow = "";
 }
 
-function openReader(title, sub, paragraphs, onBack) {
+async function openReader(title, sub, file, onBack) {
   const inner = document.getElementById("reader-inner");
   inner.innerHTML = `
     <button class="back-btn" id="reader-back">← 返回</button>
     <h2 class="reader-title">${title}</h2>
     <p class="reader-sub">${sub}</p>
-    <div class="reader-body">${paragraphs.map(p => `<p>${p}</p>`).join("")}</div>
+    <div class="reader-body"><p style="text-indent:0; color:var(--pearl-dim)">正在打撈文字……</p></div>
     <p class="reader-end"><span class="orn">♪</span>　歌聲暫歇　<span class="orn">♪</span></p>`;
   inner.querySelector("#reader-back").addEventListener("click", onBack);
   readerOverlay.classList.add("open");
   document.body.style.overflow = "hidden";
   readerOverlay.scrollTop = 0;
+  try {
+    const r = await fetch(file);
+    if (!r.ok) throw new Error(r.status);
+    const text = await r.text();
+    const paras = text.split(/\r?\n+/).map(p => p.trim()).filter(Boolean);
+    inner.querySelector(".reader-body").innerHTML = paras.map(p => "<p>" + escapeHtml(p) + "</p>").join("");
+  } catch (e) {
+    inner.querySelector(".reader-body").innerHTML =
+      '<p style="text-indent:0; color:var(--pearl-dim)">找不到內文檔（' + escapeHtml(file) + '）。請確認 works.json 裡的 file 路徑和 content 資料夾內的檔名一致；若是在本機直接開啟，請改用本機伺服器或上傳後瀏覽。</p>';
+  }
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 function closeReader() {
