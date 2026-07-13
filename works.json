@@ -1,0 +1,52 @@
+{
+  "novels": [
+    {
+      "title": "執願",
+      "status": "連載中",
+      "genre": "古風",
+      "blurb": "海底有一座從未竣工的歌劇院，每逢月圓，就會傳出無人指揮的合唱。她循著歌聲潛入，卻在第一排的座位上，看見了寫著自己名字的節目單。",
+      "chapters": [
+        { "name": "第一樂章　月光下的序曲", "date": "2026.05.02", "file": "content/opera-01.txt" },
+        { "name": "第二樂章　空著的指揮台", "date": "2026.05.16", "file": "content/opera-02.txt" },
+        { "name": "第三樂章　節目單", "date": "2026.06.01", "file": "content/opera-03.txt" }
+      ]
+    },
+    {
+      "title": "珍珠是海的回聲",
+      "status": "已完結",
+      "genre": "都會・情感",
+      "blurb": "調音師接下一件奇怪的委託：修復一架被海水泡過的鋼琴。琴鍵縫裡卡著一顆珍珠，而每彈一個音，珍珠就亮一次——像有人在很遠的地方，一句一句回應。全書十二章，已完結。",
+      "chapters": [
+        { "name": "第一樂章　走音的琴", "date": "2025.09.10", "file": "content/pearl-01.txt" },
+        { "name": "第二樂章　委託人", "date": "2025.09.24", "file": "content/pearl-02.txt" },
+        { "name": "終樂章　回聲", "date": "2026.02.14", "file": "content/pearl-12.txt" }
+      ]
+    }
+  ],
+  "stories": [
+    {
+      "title": "夜光潮汐",
+      "genre": "奇幻",
+      "length": "約 4,200 字",
+      "date": "2026.03.12",
+      "excerpt": "這座城市的海，只在停電的夜晚發光。",
+      "file": "content/night-tide.txt"
+    },
+    {
+      "title": "只唱給一個人的歌",
+      "genre": "情感",
+      "length": "約 6,800 字",
+      "date": "2026.01.30",
+      "excerpt": "她的歌單裡有一首從未發佈的歌，播放次數：一。",
+      "file": "content/one-song.txt"
+    },
+    {
+      "title": "耳骨上的珍珠",
+      "genre": "懸疑",
+      "length": "約 3,500 字",
+      "date": "2025.12.24",
+      "excerpt": "當鋪老闆說，這顆珍珠不能收——它到了夜裡會唱歌，唱的還是死人的聲音。",
+      "file": "content/pearl-earring.txt"
+    }
+  ]
+}
