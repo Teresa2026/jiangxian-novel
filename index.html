@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>潮聲書齋｜海妖的小說集</title>
+<style>
+  :root {
+    --abyss: #10152B;        /* 深海底色 */
+    --abyss-2: #182242;      /* 稍淺的海藍 */
+    --navy: #232F55;         /* 卡片藍 */
+    --pearl: #EFEDE6;        /* 珍珠白（主文字）*/
+    --pearl-dim: #A9AFC4;    /* 淡霧文字 */
+    --aqua: #7FDEE2;         /* 湖水青（髮色）*/
+    --gold: #D4B36A;         /* 金線 */
+    --amethyst: #A98BD6;     /* 紫水晶 */
+    --line: rgba(127,222,226,0.22);
+    --serif: "Noto Serif TC", "Songti TC", "SimSun", "PMingLiU", serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation: none !important; transition: none !important; }
+  }
+
+  body {
+    background:
+      radial-gradient(60vw 40vh at 80% -5%, rgba(127,222,226,0.10), transparent 60%),
+      radial-gradient(50vw 40vh at 10% 30%, rgba(169,139,214,0.08), transparent 60%),
+      linear-gradient(180deg, #131A35 0%, var(--abyss) 45%, #0B0F20 100%);
+    background-attachment: fixed;
+    color: var(--pearl);
+    font-family: var(--serif);
+    line-height: 1.9;
+    letter-spacing: 0.04em;
+    min-height: 100vh;
+  }
+
+  /* ── 上升的珍珠光點 ── */
+  .bubbles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .bubbles span {
+    position: absolute; bottom: -3vh;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff, var(--aqua) 55%, transparent 75%);
+    box-shadow: 0 0 12px rgba(127,222,226,0.8);
+    opacity: 0;
+    animation: rise linear infinite;
+  }
+  @keyframes rise {
+    0%   { transform: translateY(0) translateX(0); opacity: 0; }
+    12%  { opacity: 0.85; }
+    85%  { opacity: 0.5; }
+    100% { transform: translateY(-108vh) translateX(3vw); opacity: 0; }
+  }
+
+  main, nav, footer { position: relative; z-index: 1; }
+
+  /* ── 導覽列 ── */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 1.1rem 6vw;
+    background: rgba(16,21,43,0.82);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .brand { font-size: 1.15rem; font-weight: 700; letter-spacing: 0.35em; cursor: pointer;
+           text-shadow: 0 0 16px rgba(127,222,226,0.35); }
+  .brand em { font-style: normal; color: var(--aqua); }
+  .nav-links { display: flex; gap: 2rem; font-size: 0.92rem; }
+  .nav-links a { color: var(--pearl-dim); text-decoration: none; letter-spacing: 0.2em; transition: color .2s, text-shadow .2s; }
+  .nav-links a:hover, .nav-links a:focus-visible { color: var(--aqua); text-shadow: 0 0 12px rgba(127,222,226,0.6); }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--aqua); outline-offset: 3px; }
+
+  /* ── 首頁 ── */
+  header.hero {
+    text-align: center;
+    padding: clamp(4rem, 12vh, 8rem) 6vw 3rem;
+  }
+  .hero .eyebrow {
+    color: var(--amethyst); font-size: 0.85rem; letter-spacing: 0.6em; margin-bottom: 1.4rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 700; letter-spacing: 0.3em;
+    text-shadow: 0 0 24px rgba(127,222,226,0.55), 0 0 60px rgba(127,222,226,0.25);
+    margin-bottom: 1.6rem;
+  }
+  .hero p.intro { color: var(--pearl-dim); max-width: 34rem; margin: 0 auto 1rem; }
+  .hero-cta {
+    display: inline-block; margin-top: 1.2rem;
+    color: var(--pearl); text-decoration: none;
+    border: 1px solid var(--aqua); border-radius: 999px;
+    padding: 0.45rem 1.8rem; font-size: 0.95rem; letter-spacing: 0.25em;
+    box-shadow: 0 0 18px rgba(127,222,226,0.25), inset 0 0 12px rgba(127,222,226,0.10);
+    transition: box-shadow .25s, color .25s;
+  }
+  .hero-cta:hover { color: var(--aqua); box-shadow: 0 0 28px rgba(127,222,226,0.5), inset 0 0 16px rgba(127,222,226,0.2); }
+
+  /* ── 珍珠五線譜（簽名元素）── */
+  .staff {
+    position: relative;
+    max-width: 62rem; height: 96px;
+    margin: 3.5rem auto 0;
+    padding: 0 4vw;
+  }
+  .staff .lines { position: absolute; inset: 0 4vw; display: flex; flex-direction: column; justify-content: space-between; }
+  .staff .lines i { display: block; height: 1px; background: linear-gradient(90deg, transparent, var(--line) 12%, var(--line) 88%, transparent); }
+  .staff .clef {
+    position: absolute; left: calc(4vw + 6px); top: 50%; transform: translateY(-54%);
+    font-size: 4.2rem; line-height: 1; color: var(--gold);
+    text-shadow: 0 0 14px rgba(212,179,106,0.5);
+    font-family: serif;
+  }
+  .staff .note {
+    position: absolute; width: 15px; height: 15px; border-radius: 50%;
+    background: radial-gradient(circle at 32% 28%, #FFFFFF, #D8E6EA 40%, #8FB4C4 75%);
+    box-shadow: 0 0 14px rgba(127,222,226,0.75), 0 0 30px rgba(127,222,226,0.3);
+    animation: shimmer 3.2s ease-in-out infinite;
+  }
+  .staff .note.violet {
+    background: radial-gradient(circle at 32% 28%, #FFFFFF, #D9CBEF 40%, var(--amethyst) 75%);
+    box-shadow: 0 0 14px rgba(169,139,214,0.75), 0 0 30px rgba(169,139,214,0.3);
+  }
+  .staff .note::after { /* 符桿 */
+    content: ""; position: absolute; right: -1px; bottom: 55%;
+    width: 1.5px; height: 34px; background: rgba(239,237,230,0.55);
+  }
+  @keyframes shimmer {
+    0%, 100% { filter: brightness(1); }
+    50%      { filter: brightness(1.45); }
+  }
+
+  /* ── 區塊 ── */
+  section { padding: 4.5rem 6vw; }
+  .section-head { display: flex; align-items: baseline; gap: 1.2rem; margin-bottom: 2.6rem; }
+  .section-head .orn { color: var(--gold); text-shadow: 0 0 10px rgba(212,179,106,0.5); }
+  .section-head h2 { font-size: 1.5rem; letter-spacing: 0.3em; font-weight: 700; }
+  .section-head .rule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--line), transparent); }
+  .section-head .count { color: var(--pearl-dim); font-size: 0.85rem; letter-spacing: 0.15em; }
+
+  /* ── 長篇 ── */
+  .shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
+  .novel-card {
+    position: relative;
+    background: linear-gradient(160deg, rgba(35,47,85,0.85), rgba(24,34,66,0.85));
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1.8rem 1.7rem 1.5rem;
+    cursor: pointer;
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    overflow: hidden;
+  }
+  .novel-card::before { /* 卡片頂端的珍珠鏈 */
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--aqua), var(--amethyst), transparent);
+    opacity: 0.7;
+  }
+  .novel-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(127,222,226,0.55);
+    box-shadow: 0 14px 34px rgba(0,0,0,0.45), 0 0 24px rgba(127,222,226,0.18);
+  }
+  .novel-card h3 {
+    font-size: 1.3rem; letter-spacing: 0.2em; margin-bottom: 0.7rem;
+    text-shadow: 0 0 14px rgba(127,222,226,0.35);
+  }
+  .novel-card h3 .n { color: var(--gold); font-size: 0.95rem; margin-right: 0.5rem; }
+  .status {
+    display: inline-block;
+    font-size: 0.72rem; letter-spacing: 0.25em;
+    color: var(--aqua); border: 1px solid rgba(127,222,226,0.5);
+    border-radius: 999px;
+    padding: 0.08rem 0.7rem; margin-bottom: 0.9rem;
+  }
+  .status.done { color: var(--amethyst); border-color: rgba(169,139,214,0.5); }
+  .novel-card .blurb { font-size: 0.92rem; color: var(--pearl-dim); }
+  .novel-card .meta { font-size: 0.8rem; color: var(--pearl-dim); margin-top: 1.1rem; letter-spacing: 0.1em; opacity: 0.85; }
+
+  /* ── 短篇 ── */
+  .stories { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.4rem; }
+  .story-card {
+    position: relative;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1.6rem 1.6rem 1.3rem;
+    cursor: pointer;
+    background: rgba(24,34,66,0.45);
+    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .story-card:hover {
+    border-color: rgba(169,139,214,0.6);
+    background: rgba(35,47,85,0.6);
+    box-shadow: 0 0 20px rgba(169,139,214,0.18);
+  }
+  .story-card h3 { font-size: 1.12rem; letter-spacing: 0.15em; margin-bottom: 0.6rem; }
+  .story-card h3::before { content: "♪ "; color: var(--gold); font-size: 0.9rem; }
+  .story-card p { font-size: 0.88rem; color: var(--pearl-dim); }
+  .story-card .meta { margin-top: 1rem; font-size: 0.78rem; color: var(--pearl-dim); letter-spacing: 0.12em; opacity: 0.85; }
+
+  /* ── 關於 ── */
+  .about-wrap { display: flex; gap: 2.5rem; align-items: flex-start; max-width: 52rem; }
+  .pearl-badge {
+    flex-shrink: 0;
+    width: 4.5rem; height: 4.5rem; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 32% 28%, rgba(255,255,255,0.95), #CFE4EA 35%, #6E93A8 80%);
+    color: #1A2340; font-weight: 700; letter-spacing: 0.1em;
+    box-shadow: 0 0 22px rgba(127,222,226,0.55), 0 0 50px rgba(127,222,226,0.2);
+  }
+  .about-text p { color: var(--pearl-dim); margin-bottom: 1rem; }
+  .about-text strong { color: var(--pearl); }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 2.4rem 6vw; text-align: center;
+    color: var(--pearl-dim); font-size: 0.82rem; letter-spacing: 0.2em;
+  }
+  footer .orn { color: var(--gold); }
+
+  /* ── 覆蓋層 ── */
+  .overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background:
+      radial-gradient(50vw 30vh at 85% 0%, rgba(127,222,226,0.08), transparent 60%),
+      linear-gradient(180deg, #131A35 0%, var(--abyss) 55%, #0B0F20 100%);
+    overflow-y: auto;
+    display: none;
+  }
+  .overlay.open { display: block; animation: fadeUp 0.3s ease; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  .overlay-inner { max-width: 44rem; margin: 0 auto; padding: 3rem 6vw 6rem; }
+  .back-btn {
+    background: none; border: none; cursor: pointer;
+    font-family: var(--serif); font-size: 0.9rem; color: var(--pearl-dim);
+    letter-spacing: 0.2em; margin-bottom: 2.5rem; padding: 0.3rem 0;
+  }
+  .back-btn:hover { color: var(--aqua); text-shadow: 0 0 10px rgba(127,222,226,0.5); }
+
+  .detail-head h2 {
+    font-size: 1.9rem; letter-spacing: 0.25em;
+    text-shadow: 0 0 20px rgba(127,222,226,0.45);
+    margin-bottom: 0.8rem;
+  }
+  .detail-head .blurb { color: var(--pearl-dim); margin-top: 0.6rem; }
+
+  .toc h3 { font-size: 1.05rem; letter-spacing: 0.35em; margin: 2.4rem 0 1rem; color: var(--gold); text-shadow: 0 0 10px rgba(212,179,106,0.4); }
+  .toc ol { list-style: none; }
+  .toc li { border-bottom: 1px dashed var(--line); }
+  .toc button {
+    width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+    font-family: var(--serif); font-size: 0.98rem; color: var(--pearl);
+    padding: 0.85rem 0.2rem; letter-spacing: 0.08em;
+    display: flex; justify-content: space-between; gap: 1rem; align-items: baseline;
+  }
+  .toc button .name::before { content: "♪　"; color: var(--aqua); font-size: 0.85rem; }
+  .toc button:hover { color: var(--aqua); }
+  .toc .chap-date { color: var(--pearl-dim); font-size: 0.8rem; }
+
+  .reader-title { font-size: 1.7rem; letter-spacing: 0.2em; font-weight: 700; margin-bottom: 0.4rem; text-shadow: 0 0 18px rgba(127,222,226,0.4); }
+  .reader-sub { color: var(--pearl-dim); font-size: 0.88rem; letter-spacing: 0.15em; margin-bottom: 2.8rem; }
+  .reader-body p { font-size: 1.05rem; line-height: 2.2; margin-bottom: 1.6rem; text-indent: 2em; color: #E2E2DC; }
+  .reader-end { text-align: center; color: var(--pearl-dim); letter-spacing: 0.5em; margin-top: 3.5rem; font-size: 0.85rem; }
+  .reader-end .orn { color: var(--gold); }
+
+  /* ── 游標光波水紋 ── */
+  #cursor-fx { position: fixed; inset: 0; pointer-events: none; z-index: 200; overflow: hidden; }
+  .trail-dot {
+    position: absolute; width: 6px; height: 6px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.9), rgba(127,222,226,0.6) 60%, transparent);
+    box-shadow: 0 0 10px rgba(127,222,226,0.7);
+    transform: translate(-50%,-50%);
+    animation: trailFade 0.9s ease-out forwards;
+  }
+  @keyframes trailFade { to { opacity: 0; transform: translate(-50%,-50%) scale(0.2); } }
+  .ripple-ring {
+    position: absolute; width: 8px; height: 8px; border-radius: 50%;
+    border: 1.5px solid rgba(127,222,226,0.7);
+    box-shadow: 0 0 16px rgba(127,222,226,0.4), inset 0 0 10px rgba(127,222,226,0.3);
+    transform: translate(-50%,-50%);
+    animation: rippleGrow 1s ease-out forwards;
+  }
+  @keyframes rippleGrow { to { width: 130px; height: 130px; opacity: 0; } }
+
+  /* ── 深潛：隨捲動變暗＋水深計 ── */
+  .depth-shade { position: fixed; inset: 0; background: #04060D; opacity: 0; pointer-events: none; z-index: 90; }
+  .depth-meter {
+    position: fixed; left: 1.2rem; bottom: 1.4rem; z-index: 95;
+    display: flex; align-items: flex-end; gap: 0.6rem;
+    color: var(--pearl-dim); font-size: 0.75rem; letter-spacing: 0.15em;
+    pointer-events: none;
+  }
+  .depth-meter .gauge { width: 3px; height: 90px; background: rgba(127,222,226,0.15); border-radius: 2px; position: relative; overflow: hidden; }
+  .depth-meter .gauge i {
+    position: absolute; left: 0; right: 0; top: 0; height: 0%;
+    background: linear-gradient(180deg, var(--aqua), var(--amethyst));
+    box-shadow: 0 0 8px rgba(127,222,226,0.6);
+  }
+  .depth-meter .val { text-shadow: 0 0 8px rgba(127,222,226,0.35); }
+
+  /* ── 環境音開關 ── */
+  .sound-btn {
+    background: none; border: 1px solid var(--line); border-radius: 999px;
+    color: var(--pearl-dim); font-family: var(--serif);
+    font-size: 0.8rem; letter-spacing: 0.12em;
+    padding: 0.18rem 0.9rem; cursor: pointer;
+    transition: color .2s, border-color .2s, box-shadow .2s;
+  }
+  .sound-btn:hover { color: var(--aqua); }
+  .sound-btn.on {
+    color: var(--aqua); border-color: rgba(127,222,226,0.6);
+    box-shadow: 0 0 12px rgba(127,222,226,0.35);
+    text-shadow: 0 0 8px rgba(127,222,226,0.5);
+  }
+
+  /* ── 卡片流光傾斜 ── */
+  .novel-card, .story-card { will-change: transform; }
+  .sheen {
+    position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: radial-gradient(230px circle at var(--mx,50%) var(--my,50%),
+      rgba(255,255,255,0.15), rgba(169,139,214,0.10) 40%, rgba(127,222,226,0.05) 60%, transparent 75%);
+    opacity: 0; transition: opacity 0.25s;
+  }
+  .novel-card:hover .sheen, .story-card:hover .sheen { opacity: 1; }
+
+  /* ── 入水轉場 ── */
+  .dive-fx { position: fixed; inset: 0; z-index: 300; pointer-events: none; display: none; overflow: hidden; }
+  .dive-fx.play { display: block; }
+  .dive-fx .flash {
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 62%, rgba(127,222,226,0.30), rgba(16,21,43,0.92) 72%);
+    animation: diveFlash 0.75s ease forwards;
+  }
+  @keyframes diveFlash { 0% { opacity: 0; } 35% { opacity: 1; } 100% { opacity: 0; } }
+  .dive-fx .b {
+    position: absolute; bottom: -30px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff, rgba(127,222,226,0.85) 55%, transparent 78%);
+    box-shadow: 0 0 14px rgba(127,222,226,0.8);
+    animation: diveRise 0.75s ease-in forwards;
+  }
+  @keyframes diveRise { to { transform: translateY(-112vh); opacity: 0; } }
+
+  @media (max-width: 720px) {
+    .nav-links { gap: 1.1rem; font-size: 0.82rem; }
+    .depth-meter { display: none; }
+    .sound-btn { padding: 0.1rem 0.6rem; font-size: 0.75rem; }
+    .staff { height: 78px; }
+    .staff .clef { font-size: 3.2rem; }
+    .staff .note::after { height: 26px; }
+    .about-wrap { flex-direction: column; gap: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bubbles" aria-hidden="true" id="bubbles"></div>
+<div class="depth-shade" aria-hidden="true" id="depth-shade"></div>
+<div id="cursor-fx" aria-hidden="true"></div>
+<div class="dive-fx" id="dive-fx" aria-hidden="true"></div>
+<div class="depth-meter" aria-hidden="true">
+  <div class="gauge"><i id="depth-bar"></i></div>
+  <span class="val" id="depth-val">水深 0 m</span>
+</div>
+
+<nav>
+  <div class="brand" onclick="closeOverlays(); window.scrollTo({top:0})">潮聲<em>書齋</em></div>
+  <div class="nav-links">
+    <a href="#novels" onclick="closeOverlays()">長篇連載</a>
+    <a href="#stories" onclick="closeOverlays()">短篇集</a>
+    <a href="#about" onclick="closeOverlays()">關於作者</a>
+    <button class="sound-btn" id="sound-toggle" aria-label="環境音開關" aria-pressed="false">♪ 潮聲</button>
+  </div>
+</nav>
+
+<main>
+<header class="hero">
+  <p class="eyebrow">海 妖 的 小 說 集</p>
+  <h1>把故事唱給深海聽</h1>
+  <p class="intro">傳說海妖的歌聲能讓人忘了歸途。這裡收藏我寫下的每一首「歌」——長篇如組曲，短篇如單音，都在幽藍的水光裡靜靜發亮，等你側耳。</p>
+  <a class="hero-cta" href="#novels">潛入書海 ♪</a>
+
+  <div class="staff" aria-hidden="true">
+    <div class="lines"><i></i><i></i><i></i><i></i><i></i></div>
+    <span class="clef">𝄞</span>
+    <span class="note" style="left:22%; top:18px; animation-delay:0s"></span>
+    <span class="note violet" style="left:33%; top:42px; animation-delay:.5s"></span>
+    <span class="note" style="left:44%; top:30px; animation-delay:1s"></span>
+    <span class="note" style="left:56%; top:54px; animation-delay:1.4s"></span>
+    <span class="note violet" style="left:67%; top:24px; animation-delay:1.9s"></span>
+    <span class="note" style="left:78%; top:44px; animation-delay:2.4s"></span>
+    <span class="note violet" style="left:88%; top:32px; animation-delay:2.8s"></span>
+  </div>
+</header>
+
+<section id="novels">
+  <div class="section-head">
+    <span class="orn">♫</span>
+    <h2>長篇連載</h2>
+    <span class="rule"></span>
+    <span class="count" id="novel-count"></span>
+  </div>
+  <div class="shelf" id="novel-shelf"></div>
+</section>
+
+<section id="stories">
+  <div class="section-head">
+    <span class="orn">♪</span>
+    <h2>短篇集</h2>
+    <span class="rule"></span>
+    <span class="count" id="story-count"></span>
+  </div>
+  <div class="stories" id="story-grid"></div>
+</section>
+
+<section id="about">
+  <div class="section-head">
+    <span class="orn">✦</span>
+    <h2>關於作者</h2>
+    <span class="rule"></span>
+  </div>
+  <div class="about-wrap">
+    <div class="pearl-badge">泠汐</div>
+    <div class="about-text">
+      <p>筆名「泠汐」，一隻棲在網路深處的海妖。相信故事和歌一樣，是寫給願意停下來聽的人。偏愛海的顏色、珍珠的光，還有夜裡安靜的旋律。</p>
+      <p>長篇不定期詠唱更新，短篇隨潮汐上岸。想追蹤新歌或交流，歡迎來信：<strong>hello@example.com</strong></p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>© 2026 潮聲書齋 <span class="orn">♪</span> 所有作品皆為原創，轉載請先來信詢問</footer>
+
+<!-- 長篇詳細頁 -->
+<div class="overlay" id="detail-overlay" role="dialog" aria-modal="true">
+  <div class="overlay-inner" id="detail-inner"></div>
+</div>
+
+<!-- 閱讀頁 -->
+<div class="overlay" id="reader-overlay" role="dialog" aria-modal="true">
+  <div class="overlay-inner" id="reader-inner"></div>
+</div>
+
+<script>
+/* ============================================================
+   作品資料：直接編輯以下內容，換成你自己的小說即可。
+   novels  = 長篇（含章節）
+   stories = 短篇（單篇成文）
+   ============================================================ */
+const novels = [
+  {
+    title: "沉沒的歌劇院",
+    status: "連載中",
+    genre: "奇幻・懸疑",
+    blurb: "海底有一座從未竣工的歌劇院，每逢月圓，就會傳出無人指揮的合唱。她循著歌聲潛入，卻在第一排的座位上，看見了寫著自己名字的節目單。",
+    chapters: [
+      { name: "第一樂章　月光下的序曲", date: "2026.05.02", text: ["歌聲是從水面下傳來的。起初她以為是風，但風不會唱出和聲，更不會在同一個小節，一次又一次地停在她的名字上。", "（這是示範內文，請替換成你自己的章節文字。）"] },
+      { name: "第二樂章　空著的指揮台", date: "2026.05.16", text: ["歌劇院比傳說中更完整，也更空。唯一缺席的，是指揮。", "（示範內文，請替換。）"] },
+      { name: "第三樂章　節目單", date: "2026.06.01", text: ["節目單的最後一頁寫著：終曲，由妳完成。", "（示範內文，請替換。）"] }
+    ]
+  },
+  {
+    title: "珍珠是海的回聲",
+    status: "已完結",
+    genre: "都會・情感",
+    blurb: "調音師接下一件奇怪的委託：修復一架被海水泡過的鋼琴。琴鍵縫裡卡著一顆珍珠，而每彈一個音，珍珠就亮一次——像有人在很遠的地方，一句一句回應。全書十二章，已完結。",
+    chapters: [
+      { name: "第一樂章　走音的琴", date: "2025.09.10", text: ["那架鋼琴的音不準，準的是它發光的時機。", "（示範內文，請替換。）"] },
+      { name: "第二樂章　委託人", date: "2025.09.24", text: ["委託人只留下一句話：請把它調回那年夏天的音。", "（示範內文，請替換。）"] },
+      { name: "終樂章　回聲", date: "2026.02.14", text: ["最後一個音落下時，珍珠亮了很久，像終於說完了一句話。", "（示範內文，請替換。）"] }
+    ]
+  }
+];
+
+const stories = [
+  {
+    title: "夜光潮汐",
+    genre: "奇幻", length: "約 4,200 字", date: "2026.03.12",
+    text: ["這座城市的海，只在停電的夜晚發光。", "（這是示範內文，請替換成你自己的短篇全文。每個段落用一組引號分開即可。）"]
+  },
+  {
+    title: "只唱給一個人的歌",
+    genre: "情感", length: "約 6,800 字", date: "2026.01.30",
+    text: ["她的歌單裡有一首從未發佈的歌，播放次數：一。", "（示範內文，請替換。）"]
+  },
+  {
+    title: "耳骨上的珍珠",
+    genre: "懸疑", length: "約 3,500 字", date: "2025.12.24",
+    text: ["當鋪老闆說，這顆珍珠不能收——它到了夜裡會唱歌，唱的還是死人的聲音。", "（示範內文，請替換。）"]
+  }
+];
+
+/* ── 以下是網站運作程式，通常不需要修改 ── */
+const finePointer = window.matchMedia("(pointer: fine)").matches;
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* 上升珍珠光點 */
+(function () {
+  const wrap = document.getElementById("bubbles");
+  for (let i = 0; i < 18; i++) {
+    const s = document.createElement("span");
+    const size = 4 + Math.random() * 6;
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.width = size + "px";
+    s.style.height = size + "px";
+    s.style.animationDuration = 14 + Math.random() * 16 + "s";
+    s.style.animationDelay = Math.random() * 18 + "s";
+    wrap.appendChild(s);
+  }
+})();
+
+const shelf = document.getElementById("novel-shelf");
+const grid = document.getElementById("story-grid");
+document.getElementById("novel-count").textContent = "共 " + novels.length + " 部";
+document.getElementById("story-count").textContent = "共 " + stories.length + " 篇";
+
+novels.forEach((n, i) => {
+  const card = document.createElement("div");
+  card.className = "novel-card";
+  card.setAttribute("role", "button");
+  card.setAttribute("tabindex", "0");
+  card.innerHTML = `
+    <h3><span class="n">♫</span>${n.title}</h3>
+    <span class="status ${n.status === "已完結" ? "done" : ""}">${n.status}</span>
+    <p class="blurb">${n.blurb}</p>
+    <p class="meta">${n.genre}　·　共 ${n.chapters.length} 章　·　最近更新 ${n.chapters[n.chapters.length-1].date}</p>`;
+  card.addEventListener("click", () => diveInto(() => openDetail(i)));
+  card.addEventListener("keydown", e => { if (e.key === "Enter") diveInto(() => openDetail(i)); });
+  enableTilt(card);
+  shelf.appendChild(card);
+});
+
+stories.forEach((s) => {
+  const card = document.createElement("div");
+  card.className = "story-card";
+  card.setAttribute("role", "button");
+  card.setAttribute("tabindex", "0");
+  card.innerHTML = `
+    <h3>${s.title}</h3>
+    <p>${s.text[0]}</p>
+    <p class="meta">${s.genre}　·　${s.length}　·　${s.date}</p>`;
+  card.addEventListener("click", () => diveInto(() => openReader(s.title, s.genre + "　·　" + s.date, s.text, () => closeReader())));
+  card.addEventListener("keydown", e => { if (e.key === "Enter") card.click(); });
+  enableTilt(card);
+  grid.appendChild(card);
+});
+
+const detailOverlay = document.getElementById("detail-overlay");
+const readerOverlay = document.getElementById("reader-overlay");
+
+function openDetail(idx) {
+  const n = novels[idx];
+  const inner = document.getElementById("detail-inner");
+  inner.innerHTML = `
+    <button class="back-btn" onclick="closeDetail()">← 浮回書齋</button>
+    <div class="detail-head">
+      <h2>${n.title}</h2>
+      <span class="status ${n.status === "已完結" ? "done" : ""}">${n.status}</span>
+      <p class="blurb">${n.blurb}</p>
+    </div>
+    <div class="toc">
+      <h3>樂 章 目 錄</h3>
+      <ol id="toc-list"></ol>
+    </div>`;
+  const list = inner.querySelector("#toc-list");
+  n.chapters.forEach(c => {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.innerHTML = `<span class="name">${c.name}</span><span class="chap-date">${c.date}</span>`;
+    btn.addEventListener("click", () => diveInto(() => openReader(c.name, n.title + "　·　" + c.date, c.text, () => closeReader())));
+    li.appendChild(btn);
+    list.appendChild(li);
+  });
+  detailOverlay.classList.add("open");
+  document.body.style.overflow = "hidden";
+  detailOverlay.scrollTop = 0;
+}
+
+function closeDetail() {
+  detailOverlay.classList.remove("open");
+  if (!readerOverlay.classList.contains("open")) document.body.style.overflow = "";
+}
+
+function openReader(title, sub, paragraphs, onBack) {
+  const inner = document.getElementById("reader-inner");
+  inner.innerHTML = `
+    <button class="back-btn" id="reader-back">← 返回</button>
+    <h2 class="reader-title">${title}</h2>
+    <p class="reader-sub">${sub}</p>
+    <div class="reader-body">${paragraphs.map(p => `<p>${p}</p>`).join("")}</div>
+    <p class="reader-end"><span class="orn">♪</span>　歌聲暫歇　<span class="orn">♪</span></p>`;
+  inner.querySelector("#reader-back").addEventListener("click", onBack);
+  readerOverlay.classList.add("open");
+  document.body.style.overflow = "hidden";
+  readerOverlay.scrollTop = 0;
+}
+
+function closeReader() {
+  readerOverlay.classList.remove("open");
+  if (!detailOverlay.classList.contains("open")) document.body.style.overflow = "";
+}
+
+function closeOverlays() { closeReader(); closeDetail(); }
+
+/* ── 互動功能 ── */
+
+/* 1. 游標光波水紋 */
+(function () {
+  if (!finePointer || reduceMotion) return;
+  const fx = document.getElementById("cursor-fx");
+  let last = 0;
+  window.addEventListener("mousemove", e => {
+    const now = performance.now();
+    if (now - last < 45) return;
+    last = now;
+    const d = document.createElement("span");
+    d.className = "trail-dot";
+    d.style.left = e.clientX + "px";
+    d.style.top = e.clientY + "px";
+    fx.appendChild(d);
+    setTimeout(() => d.remove(), 900);
+  });
+  window.addEventListener("click", e => {
+    const r = document.createElement("span");
+    r.className = "ripple-ring";
+    r.style.left = e.clientX + "px";
+    r.style.top = e.clientY + "px";
+    fx.appendChild(r);
+    setTimeout(() => r.remove(), 1000);
+  });
+})();
+
+/* 2. 深潛式捲動＋水深計 */
+(function () {
+  const shade = document.getElementById("depth-shade");
+  const bar = document.getElementById("depth-bar");
+  const val = document.getElementById("depth-val");
+  function update() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const p = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+    shade.style.opacity = (p * 0.35).toFixed(3);
+    bar.style.height = (p * 100).toFixed(1) + "%";
+    val.textContent = "水深 " + Math.round(p * 200) + " m";
+  }
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update);
+  update();
+})();
+
+/* 3. 環境音（Web Audio 即時合成，無需音檔）*/
+(function () {
+  const btn = document.getElementById("sound-toggle");
+  let ctx = null, master = null, on = false;
+  function build() {
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    master = ctx.createGain();
+    master.gain.value = 0;
+    master.connect(ctx.destination);
+    /* 海浪：低通濾波的噪音，音量隨慢速波動起伏 */
+    const len = ctx.sampleRate * 4;
+    const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+    const noise = ctx.createBufferSource();
+    noise.buffer = buf; noise.loop = true;
+    const lp = ctx.createBiquadFilter();
+    lp.type = "lowpass"; lp.frequency.value = 420; lp.Q.value = 0.6;
+    const waveGain = ctx.createGain(); waveGain.gain.value = 0.10;
+    const lfo = ctx.createOscillator(); lfo.frequency.value = 0.08;
+    const lfoGain = ctx.createGain(); lfoGain.gain.value = 0.06;
+    lfo.connect(lfoGain); lfoGain.connect(waveGain.gain);
+    noise.connect(lp); lp.connect(waveGain); waveGain.connect(master);
+    noise.start(); lfo.start();
+    /* 海妖泛音：兩個極輕的長音，帶著緩慢的顫動 */
+    [130.8, 196.0].forEach((f, i) => {
+      const o = ctx.createOscillator(); o.type = "sine"; o.frequency.value = f;
+      const g = ctx.createGain(); g.gain.value = 0.012;
+      const vib = ctx.createOscillator(); vib.frequency.value = 0.15 + i * 0.07;
+      const vibG = ctx.createGain(); vibG.gain.value = 1.6;
+      vib.connect(vibG); vibG.connect(o.frequency);
+      o.connect(g); g.connect(master);
+      o.start(); vib.start();
+    });
+  }
+  btn.addEventListener("click", e => {
+    e.stopPropagation();
+    if (!ctx) build();
+    if (ctx.state === "suspended") ctx.resume();
+    on = !on;
+    master.gain.setTargetAtTime(on ? 1 : 0, ctx.currentTime, 0.8);
+    btn.classList.toggle("on", on);
+    btn.setAttribute("aria-pressed", on);
+    btn.textContent = on ? "♪ 潮聲・開" : "♪ 潮聲";
+  });
+})();
+
+/* 4. 卡片流光傾斜 */
+function enableTilt(card) {
+  const sheen = document.createElement("span");
+  sheen.className = "sheen";
+  card.appendChild(sheen);
+  if (!finePointer || reduceMotion) return;
+  card.addEventListener("mousemove", e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width;
+    const y = (e.clientY - r.top) / r.height;
+    card.style.setProperty("--mx", (x * 100) + "%");
+    card.style.setProperty("--my", (y * 100) + "%");
+    card.style.transform =
+      "translateY(-4px) perspective(700px) rotateX(" + ((0.5 - y) * 6).toFixed(2) + "deg) rotateY(" + ((x - 0.5) * 8).toFixed(2) + "deg)";
+  });
+  card.addEventListener("mouseleave", () => { card.style.transform = ""; });
+}
+
+/* 5. 入水轉場 */
+const diveFx = document.getElementById("dive-fx");
+function diveInto(open) {
+  if (reduceMotion) { open(); return; }
+  diveFx.innerHTML = '<div class="flash"></div>';
+  for (let i = 0; i < 14; i++) {
+    const b = document.createElement("span");
+    b.className = "b";
+    const size = 6 + Math.random() * 12;
+    b.style.left = (5 + Math.random() * 90) + "vw";
+    b.style.width = size + "px";
+    b.style.height = size + "px";
+    b.style.animationDelay = (Math.random() * 0.18) + "s";
+    diveFx.appendChild(b);
+  }
+  diveFx.classList.add("play");
+  setTimeout(open, 320);
+  setTimeout(() => { diveFx.classList.remove("play"); diveFx.innerHTML = ""; }, 950);
+}
+</script>
+</body>
+</html>
