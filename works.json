@@ -13,12 +13,12 @@
         { "name": "伍、放下執念", "date": "2026.07.14", "file": "content/opera-05.txt" }]
     },
     {
-      "title": "暈染黎明的雨",
+      "title": "暈染黎明的雨","zone": "二創",
       "status": "連載中",
       "genre": "原向",
       "blurb": "戀與深空-黎深原向",
       "chapters": [
-        { "name": "0.1g的砂糖", "date": "2026.07.14","zone": "二創", "file": "content/zayne01.txt" }
+        { "name": "0.1g的砂糖", "date": "2026.07.14","file": "content/zayne01.txt" }
         ]
     }
   ]
