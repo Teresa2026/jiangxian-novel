@@ -241,27 +241,73 @@
   }
 
   /* 半弧形環繞書牆 */
-  .arc { position: absolute; left: 50%; top: 9%; height: 74vh; transform-style: preserve-3d; z-index: 2; will-change: transform; }
+  .arc { position: absolute; left: 50%; top: 5%; height: 84vh; transform-style: preserve-3d; z-index: 2; will-change: transform; }
   .panel {
-    position: absolute; left: -96px; top: 0; width: 192px; height: 100%;
-    transform: rotateY(var(--a)) translateZ(-680px);
+    position: absolute; left: -118px; top: 0; width: 236px; height: 100%;
+    transform: rotateY(var(--a)) translateZ(-838px);
     transform-style: preserve-3d;
+  }
+  .pflip {
+    position: absolute; inset: 0;
+    transform-style: preserve-3d;
+    transition: transform 0.9s ease;
+    transition-delay: var(--fd, 0s);
+  }
+  .arc.flipped .pflip { transform: rotateY(180deg); }
+  .face {
+    position: absolute; inset: 0;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
     background: linear-gradient(180deg, #F8F2E1, #ECE0C2);
     border: 1px solid rgba(176,138,62,0.75);
     box-shadow: inset 0 0 22px rgba(176,138,62,0.16), 0 12px 26px rgba(120,95,40,0.20);
-    display: flex; flex-direction: column; gap: 8px; padding: 9px 7px;
+    display: flex; flex-direction: column; gap: 8px; padding: 9px 8px;
   }
-  .panel::before { /* 頂部拱飾 */
+  .face.back { transform: rotateY(180deg); }
+  .face::before { /* 頂部拱飾 */
     content: ""; flex: 0 0 13px;
     border: 1px solid rgba(176,138,62,0.5); border-bottom: none;
     border-radius: 999px 999px 0 0;
   }
+
+  /* 密室拉桿 */
+  .lever {
+    position: absolute; right: 3vw; bottom: 14%; z-index: 26;
+    width: 56px; height: 100px;
+    background: none; border: none; cursor: pointer; padding: 0;
+  }
+  .lever .plate {
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 36px; height: 14px; border-radius: 7px;
+    background: linear-gradient(180deg, #D9BC79, #8A6F35);
+    box-shadow: 0 2px 8px rgba(90,70,30,0.45);
+    display: block;
+  }
+  .lever .arm {
+    position: absolute; bottom: 10px; left: 50%;
+    width: 7px; height: 58px; margin-left: -3.5px; border-radius: 4px;
+    background: linear-gradient(90deg, #C9A85C, #8A6F35);
+    transform-origin: bottom center; transform: rotate(-26deg);
+    transition: transform 0.5s ease;
+    box-shadow: 0 0 8px rgba(176,138,62,0.4);
+    display: block;
+  }
+  .lever .knob {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    width: 17px; height: 17px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #FFF7E0, #D9BC79 45%, #8A6F35 85%);
+    box-shadow: 0 0 10px rgba(212,179,106,0.7);
+    display: block;
+    transition: box-shadow 0.25s;
+  }
+  .lever:hover .knob { box-shadow: 0 0 18px rgba(212,179,106,1); }
+  .lever.pulled .arm { transform: rotate(26deg); }
+
   .level {
     flex: 1; position: relative; min-height: 0;
     background: linear-gradient(180deg, #17214B, #0E1530);
     border: 1px solid rgba(201,168,92,0.65);
     border-radius: 4px;
-    display: flex; align-items: flex-end; gap: 3px;
+    display: flex; align-items: flex-end; justify-content: flex-end; gap: 3px;
     padding: 0 5px 8px;
     overflow: hidden;
   }
@@ -269,6 +315,41 @@
     content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 6px;
     background: linear-gradient(180deg, #C9A85C, #8A6F35);
     border-radius: 0 0 3px 3px;
+  }
+
+
+  /* ── 機關拉桿：翻轉書櫃 ── */
+  .lever { position: absolute; right: 2.2rem; bottom: 2.6rem; width: 66px; height: 104px; z-index: 26; cursor: pointer; }
+  .lever::before { /* 黃銅底座 */
+    content: ""; position: absolute; inset: 0 6px 16px;
+    border: 1.5px solid rgba(176,138,62,0.75); border-radius: 9px;
+    background: linear-gradient(180deg, #F5EDD8, #E0D0A6);
+    box-shadow: 0 4px 14px rgba(120,95,40,0.35), inset 0 0 10px rgba(176,138,62,0.28);
+  }
+  .lever .slot {
+    position: absolute; left: 50%; top: 12px; transform: translateX(-50%);
+    width: 10px; height: 56px; border-radius: 6px;
+    background: linear-gradient(180deg, #6B551F, #3F3213);
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.7), 0 0 0 3px rgba(201,168,92,0.85);
+  }
+  .lever .stick {
+    position: absolute; left: 50%; bottom: 38px; width: 6px; height: 54px; margin-left: -3px;
+    transform-origin: bottom center; transform: rotate(-24deg);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: linear-gradient(90deg, #8A6F35, #DDC183, #8A6F35);
+    border-radius: 3px;
+  }
+  .lever .knob {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    width: 17px; height: 17px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #FFF3D6, #E3C77E 50%, #A98443 85%);
+    box-shadow: 0 0 10px rgba(212,179,106,0.85), 0 0 22px rgba(212,179,106,0.35);
+  }
+  .lever:hover .knob { box-shadow: 0 0 16px rgba(212,179,106,1), 0 0 30px rgba(212,179,106,0.5); }
+  .lever.pulled .stick { transform: rotate(24deg); }
+  .lever .lever-label {
+    position: absolute; bottom: 0; width: 100%; text-align: center;
+    font-size: 0.62rem; letter-spacing: 0.42em; color: #8A6F35;
   }
 
   .v1 { --bg: linear-gradient(175deg, #29365F, #182142); }
@@ -279,13 +360,13 @@
     position: relative;
     writing-mode: vertical-rl;
     display: flex; align-items: center; justify-content: center;
-    height: var(--sh, 82%); width: var(--sw, 32px);
+    height: var(--sh, 84%); width: var(--sw, 42px);
     flex-shrink: 0;
     background: var(--bg);
     border: 1px solid rgba(212,179,106,0.4);
     border-radius: 3px 3px 2px 2px;
     cursor: pointer;
-    font-size: 0.88rem; font-weight: 700; letter-spacing: 0.2em;
+    font-size: 1.05rem; font-weight: 700; letter-spacing: 0.22em;
     color: var(--pearl);
     text-shadow: 0 0 8px rgba(127,222,226,0.35);
     padding: 7px 0;
@@ -347,12 +428,6 @@
     font-size: 1.45rem; font-weight: 700; letter-spacing: 0.3em;
     text-shadow: 0 0 16px rgba(127,222,226,0.5);
   }
-  .cover-author {
-    position: absolute; right: 20px; bottom: 52px;
-    writing-mode: vertical-rl;
-    font-size: 0.8rem; letter-spacing: 0.35em; color: var(--gold);
-    text-shadow: 0 0 8px rgba(212,179,106,0.5);
-  }
   .sheen {
     position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
     background: radial-gradient(230px circle at var(--mx,50%) var(--my,50%),
@@ -393,6 +468,21 @@
   .toc .chap-date { color: var(--pearl-dim); font-size: 0.8rem; }
 
   /* ════════ 視圖四：閱讀頁 ════════ */
+  #view-reader .page-inner { max-width: 62rem; }
+  .chap-nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: 2.6rem; }
+  .chap-nav button {
+    background: none; cursor: pointer;
+    font-family: var(--serif); font-size: 0.9rem; letter-spacing: 0.12em;
+    color: var(--pearl);
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 0.42rem 1.4rem;
+    max-width: 48%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    transition: color .2s, border-color .2s, box-shadow .2s;
+  }
+  .chap-nav button:hover {
+    color: var(--aqua); border-color: rgba(127,222,226,0.6);
+    box-shadow: 0 0 14px rgba(127,222,226,0.3);
+  }
   .reader-title { font-size: 1.6rem; letter-spacing: 0.2em; font-weight: 700; margin-bottom: 0.4rem; text-shadow: 0 0 18px rgba(127,222,226,0.4); }
   .reader-sub { color: var(--pearl-dim); font-size: 0.88rem; letter-spacing: 0.15em; margin-bottom: 2.6rem; }
   .reader-body p { font-size: 1.05rem; line-height: 2.2; margin-bottom: 1.6rem; text-indent: 2em; color: #E2E2DC; }
@@ -416,7 +506,8 @@
     .scene { perspective: none; overflow-y: auto; padding: 6.2rem 4vw 2rem; }
     .floor { display: none; }
     .arc { position: static; height: auto; transform: none; display: flex; flex-wrap: wrap; gap: 8px; }
-    .panel { position: static; width: calc(50% - 4px); height: 300px; transform: none; }
+    .panel { position: relative; left: auto; width: calc(50% - 4px); height: 300px; transform: none; }
+    .lever { position: fixed; right: 4vw; bottom: 6%; }
     .arc-legend { top: 58px; font-size: 0.72rem; letter-spacing: 0.2em; }
     .spine { font-size: 0.78rem; width: calc(var(--sw, 24px) * 1.2); }
     .book-view { flex-direction: column; align-items: center; gap: 1.8rem; }
@@ -454,10 +545,19 @@
     <button id="about-nav">關於館主</button>
   </div>
   <div class="cornice" aria-hidden="true"></div>
-  <p class="arc-legend">上層・短篇集　✦　下層・長篇連載</p>
+  <p class="arc-legend" id="arc-legend">✦　原 創 區　✦</p>
   <div class="scene">
     <div class="floor" aria-hidden="true"><i class="gloss"></i></div>
+    <button class="lever" id="shelf-lever" aria-label="翻轉書櫃" title="翻轉書櫃">
+      <span class="arm"><i class="knob"></i></span>
+      <span class="plate"></span>
+    </button>
     <div class="arc" id="arc"></div>
+    <div class="lever" id="flip-lever" role="button" tabindex="0" title="翻轉書櫃" aria-label="翻轉書櫃">
+      <span class="slot"></span>
+      <span class="stick"><i class="knob"></i></span>
+      <span class="lever-label">機關</span>
+    </div>
   </div>
 </section>
 
@@ -476,10 +576,10 @@
   <div class="page-inner">
     <button class="back-btn" onclick="showView('view-hall')">← 回到書庫</button>
     <div class="about-wrap">
-      <div class="pearl-badge">絳弦</div>
+      <div class="pearl-badge">泠汐</div>
       <div class="about-text">
-        <p>筆名「絳弦」，一隻棲在深海圖書館裡的海妖，負責替每一冊發光的故事撢灰、點燈。偏愛海的顏色、珍珠的光，還有書頁翻動的聲音。</p>
-        <p>長篇不定期上架新章，短篇隨潮汐入庫。想收到新書消息或交流，歡迎來信：<strong>jiangxian0181@gmail.com</strong></p>
+        <p>筆名「泠汐」，一隻棲在深海圖書館裡的海妖，負責替每一冊發光的故事撢灰、點燈。偏愛海的顏色、珍珠的光，還有書頁翻動的聲音。</p>
+        <p>長篇不定期上架新章，短篇隨潮汐入庫。想收到新書消息或交流，歡迎來信：<strong>hello@example.com</strong></p>
       </div>
     </div>
   </div>
@@ -628,57 +728,74 @@ function makeSpine(title, variant, ongoing, onOpen) {
 function makeFiller(seed) {
   const b = document.createElement("div");
   b.className = "spine filler v" + ((seed % 4) + 1);
-  b.style.setProperty("--sw", (18 + (seed * 7) % 18) + "px");
+  b.style.setProperty("--sw", (24 + (seed * 7) % 20) + "px");
   b.style.setProperty("--sh", (58 + (seed * 13) % 32) + "%");
   b.setAttribute("aria-hidden", "true");
   return b;
 }
 
-/* 環繞書牆：12 片書櫃板，各轉 16 度，共約 180 度包圍觀者 */
+/* 雙面環繞書牆：正面原創區、背面二創區（works.json 中 "zone": "二創" 的作品放背面）
+   12 片書櫃板，各轉 16 度，共約 180 度包圍觀者；作品由右至左、先上層後下層混排 */
 function buildArc() {
   const arc = document.getElementById("arc");
+  arc.innerHTML = "";
   const SEG = 12, STEP = 16;
-  const panels = [];
-  for (let p = 0; p < SEG; p++) {
-    const panel = document.createElement("div");
-    panel.className = "panel";
-    panel.style.setProperty("--a", ((p - (SEG - 1) / 2) * STEP) + "deg");
-    const up = document.createElement("div");
-    up.className = "level upper";
-    const low = document.createElement("div");
-    low.className = "level lower";
-    panel.appendChild(up);
-    panel.appendChild(low);
-    arc.appendChild(panel);
-    panels.push({ up, low });
-  }
-  /* 上層：短篇集 */
-  stories.forEach((s, i) => {
-    const p = i % SEG;  /* 第一本在最左邊的書櫃，依序往右，滿了輪回 */
-    const b = makeSpine(s.title, ((i + 2) % 4) + 1, false, () => openBook("story", i));
-    b.style.setProperty("--sw", (32 + (i * 7) % 10) + "px");
-    b.style.setProperty("--sh", (80 + (i * 9) % 12) + "%");
-    panels[p].up.appendChild(b);
+  const sides = { front: [], back: [] };
+  ["front", "back"].forEach(side => {
+    const wrap = document.createElement("div");
+    wrap.className = "arc-side " + side;
+    for (let p = 0; p < SEG; p++) {
+      const panel = document.createElement("div");
+      panel.className = "panel";
+      const base = (p - (SEG - 1) / 2) * STEP + (side === "back" ? 180 : 0);
+      panel.style.setProperty("--a", base + "deg");
+      const up = document.createElement("div");
+      up.className = "level upper";
+      const low = document.createElement("div");
+      low.className = "level lower";
+      panel.appendChild(up);
+      panel.appendChild(low);
+      wrap.appendChild(panel);
+      sides[side].push({ up: up, low: low });
+    }
+    arc.appendChild(wrap);
   });
-  /* 下層：長篇連載 */
-  novels.forEach((n, i) => {
-    const p = i % SEG;  /* 第一本在最左邊的書櫃，依序往右，滿了輪回 */
-    const b = makeSpine(n.title, (i % 4) + 1, n.status !== "已完結", () => openBook("novel", i));
-    b.style.setProperty("--sw", (35 + (i * 9) % 10) + "px");
-    b.style.setProperty("--sh", (84 + (i * 11) % 10) + "%");
-    panels[p].low.appendChild(b);
-  });
-  /* 補滿裝飾用無題書 */
-  panels.forEach((pl, pi) => {
-    [pl.up, pl.low].forEach((lvl, li) => {
-      const target = 5 - lvl.children.length;
-      for (let f = 0; f < target; f++) {
-        const filler = makeFiller(pi * 13 + li * 7 + f * 3 + 2);
-        lvl.appendChild(filler);  /* 裝飾書永遠排在你的作品後面 */
-      }
+
+  /* 書目合併：長篇在前、短篇在後，zone 決定正反面 */
+  const catalog = [];
+  novels.forEach((n, i) => catalog.push({ kind: "novel", idx: i, item: n }));
+  stories.forEach((s, i) => catalog.push({ kind: "story", idx: i, item: s }));
+  const zones = {
+    front: catalog.filter(e => (e.item.zone || "原創") !== "二創"),
+    back:  catalog.filter(e => (e.item.zone || "原創") === "二創")
+  };
+
+  ["front", "back"].forEach(side => {
+    const panels = sides[side];
+    zones[side].forEach((e, i) => {
+      /* 第一本在最右邊書櫃的上層，依序往左；上層滿了換下層 */
+      const level = Math.floor(i / SEG) % 2 === 0 ? "up" : "low";
+      const p = SEG - 1 - (i % SEG);
+      const ongoing = e.kind === "novel" && e.item.status !== "已完結";
+      const b = makeSpine(e.item.title, ((e.kind === "novel" ? e.idx : e.idx + 2) % 4) + 1, ongoing, () => openBook(e.kind, e.idx));
+      b.style.setProperty("--sw", (40 + (i * 9) % 10) + "px");
+      b.style.setProperty("--sh", (82 + (i * 11) % 12) + "%");
+      panels[p][level].insertBefore(b, panels[p][level].firstChild);
+    });
+    /* 裝飾書補在作品左側，讓真書維持靠右 */
+    panels.forEach((pl, pi) => {
+      ["up", "low"].forEach((lv, li) => {
+        const lvl = pl[lv];
+        const target = 5 - lvl.children.length;
+        for (let f = 0; f < target; f++) {
+          const filler = makeFiller(pi * 13 + li * 7 + f * 3 + 2);
+          lvl.insertBefore(filler, lvl.firstChild);
+        }
+      });
     });
   });
 }
+
 fetch("works.json")
   .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
   .then(data => {
@@ -694,29 +811,47 @@ fetch("works.json")
     scene.appendChild(note);
   });
 
-/* 滑鼠環視：游標左右移動時，整面書牆繞著觀者平滑轉動 */
-(function () {
-  if (!finePointer || reduceMotion) return;
-  const arc = document.getElementById("arc");
-  const scene = document.querySelector("#view-hall .scene");
-  let target = 0, current = 0, raf = null;
-  scene.addEventListener("mousemove", e => {
-    const nx = e.clientX / window.innerWidth - 0.5;  /* -0.5 ~ 0.5 */
-    const ny = e.clientY / window.innerHeight - 0.5;
-    target = nx * 52;            /* 左右最多各轉 26 度 */
-    targetX = ny;
-    if (!raf) raf = requestAnimationFrame(step);
-  });
-  let targetX = 0;
-  function step() {
-    current += (target - current) * 0.06;  /* 緩動，像轉頭而不是瞬移 */
-    arc.style.transform = "rotateY(" + current.toFixed(2) + "deg)";
-    if (Math.abs(target - current) > 0.05) {
-      raf = requestAnimationFrame(step);
-    } else {
-      raf = null;
-    }
+/* 滑鼠環視＋機關翻轉：共用同一組平滑旋轉 */
+let flipped = false;
+const arcEl = document.getElementById("arc");
+let lookTarget = 0, lookCurrent = 0, lookRaf = null;
+function lookStep() {
+  const goal = lookTarget + (flipped ? 180 : 0);
+  lookCurrent += (goal - lookCurrent) * 0.06;
+  arcEl.style.transform = "rotateY(" + lookCurrent.toFixed(2) + "deg)";
+  if (Math.abs(goal - lookCurrent) > 0.05) {
+    lookRaf = requestAnimationFrame(lookStep);
+  } else {
+    lookRaf = null;
   }
+}
+function kickLook() { if (!lookRaf) lookRaf = requestAnimationFrame(lookStep); }
+if (finePointer && !reduceMotion) {
+  document.querySelector("#view-hall .scene").addEventListener("mousemove", e => {
+    lookTarget = (e.clientX / window.innerWidth - 0.5) * 52;
+    kickLook();
+  });
+}
+
+/* 機關拉桿：翻轉書櫃到另一面 */
+(function () {
+  const lever = document.getElementById("flip-lever");
+  const legend = document.getElementById("arc-legend");
+  function flip() {
+    flipped = !flipped;
+    lever.classList.toggle("pulled", flipped);
+    arcEl.classList.toggle("flipped", flipped);
+    if (reduceMotion) {
+      arcEl.style.transform = "rotateY(" + (flipped ? 180 : 0) + "deg)";
+    } else {
+      kickLook();
+    }
+    setTimeout(() => {
+      legend.textContent = flipped ? "✦　二 創 區　✦" : "✦　原 創 區　✦";
+    }, reduceMotion ? 0 : 650);
+  }
+  lever.addEventListener("click", flip);
+  lever.addEventListener("keydown", e => { if (e.key === "Enter") flip(); });
 })();
 
 /* ── 封面頁 ── */
@@ -733,7 +868,6 @@ function openBook(kind, idx) {
       <div class="cover v${variant}">
         <span class="cover-frame"></span>
         <h2 class="cover-title">${item.title}</h2>
-        <span class="cover-author">泠汐</span>
         <span class="cover-pearl"></span>
       </div>
       <div class="book-info">
@@ -749,11 +883,11 @@ function openBook(kind, idx) {
     toc.className = "toc";
     toc.innerHTML = "<h3>館 藏 目 錄</h3><ol></ol>";
     const list = toc.querySelector("ol");
-    item.chapters.forEach(c => {
+    item.chapters.forEach((c, ci) => {
       const li = document.createElement("li");
       const btn = document.createElement("button");
       btn.innerHTML = `<span class="name">${c.name}</span><span class="chap-date">${c.date}</span>`;
-      btn.addEventListener("click", () => diveInto(() => openReader(c.name, item.title + "　·　" + c.date, c.file, "view-book")));
+      btn.addEventListener("click", () => diveInto(() => openChapter(idx, ci)));
       li.appendChild(btn);
       list.appendChild(li);
     });
@@ -771,15 +905,40 @@ function openBook(kind, idx) {
 }
 
 /* ── 閱讀頁 ── */
-async function openReader(title, sub, file, backTo) {
+function openChapter(ni, ci) {
+  const n = novels[ni];
+  const c = n.chapters[ci];
+  openReader(c.name, n.title + "　·　" + c.date, c.file, "view-book", { ni, ci });
+}
+
+async function openReader(title, sub, file, backTo, nav) {
   const inner = document.getElementById("reader-inner");
   inner.innerHTML = `
     <button class="back-btn" id="reader-back">← 返回</button>
     <h2 class="reader-title">${title}</h2>
     <p class="reader-sub">${sub}</p>
     <div class="reader-body"><p style="text-indent:0; color:var(--pearl-dim)">正在打撈文字……</p></div>
-    <p class="reader-end"><span class="orn">✦</span>　闔卷於此・潮聲仍在　<span class="orn">✦</span></p>`;
+    <p class="reader-end"><span class="orn">✦</span>　闔卷於此・潮聲仍在　<span class="orn">✦</span></p>
+    <div class="chap-nav" id="chap-nav"></div>`;
   inner.querySelector("#reader-back").addEventListener("click", () => showView(backTo));
+  if (nav) {
+    const wrap = inner.querySelector("#chap-nav");
+    const chaps = novels[nav.ni].chapters;
+    if (nav.ci > 0) {
+      const prev = document.createElement("button");
+      prev.textContent = "← 上一章・" + chaps[nav.ci - 1].name;
+      prev.addEventListener("click", () => diveInto(() => openChapter(nav.ni, nav.ci - 1)));
+      wrap.appendChild(prev);
+    } else {
+      wrap.appendChild(document.createElement("span"));
+    }
+    if (nav.ci < chaps.length - 1) {
+      const next = document.createElement("button");
+      next.textContent = "下一章・" + chaps[nav.ci + 1].name + " →";
+      next.addEventListener("click", () => diveInto(() => openChapter(nav.ni, nav.ci + 1)));
+      wrap.appendChild(next);
+    }
+  }
   showView("view-reader");
   inner.scrollTop = 0;
   try {
