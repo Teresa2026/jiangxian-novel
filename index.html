@@ -319,39 +319,6 @@
 
 
   /* ── 機關拉桿：翻轉書櫃 ── */
-  .lever { position: absolute; right: 2.2rem; bottom: 2.6rem; width: 66px; height: 104px; z-index: 26; cursor: pointer; }
-  .lever::before { /* 黃銅底座 */
-    content: ""; position: absolute; inset: 0 6px 16px;
-    border: 1.5px solid rgba(176,138,62,0.75); border-radius: 9px;
-    background: linear-gradient(180deg, #F5EDD8, #E0D0A6);
-    box-shadow: 0 4px 14px rgba(120,95,40,0.35), inset 0 0 10px rgba(176,138,62,0.28);
-  }
-  .lever .slot {
-    position: absolute; left: 50%; top: 12px; transform: translateX(-50%);
-    width: 10px; height: 56px; border-radius: 6px;
-    background: linear-gradient(180deg, #6B551F, #3F3213);
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.7), 0 0 0 3px rgba(201,168,92,0.85);
-  }
-  .lever .stick {
-    position: absolute; left: 50%; bottom: 38px; width: 6px; height: 54px; margin-left: -3px;
-    transform-origin: bottom center; transform: rotate(-24deg);
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    background: linear-gradient(90deg, #8A6F35, #DDC183, #8A6F35);
-    border-radius: 3px;
-  }
-  .lever .knob {
-    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-    width: 17px; height: 17px; border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%, #FFF3D6, #E3C77E 50%, #A98443 85%);
-    box-shadow: 0 0 10px rgba(212,179,106,0.85), 0 0 22px rgba(212,179,106,0.35);
-  }
-  .lever:hover .knob { box-shadow: 0 0 16px rgba(212,179,106,1), 0 0 30px rgba(212,179,106,0.5); }
-  .lever.pulled .stick { transform: rotate(24deg); }
-  .lever .lever-label {
-    position: absolute; bottom: 0; width: 100%; text-align: center;
-    font-size: 0.62rem; letter-spacing: 0.42em; color: #8A6F35;
-  }
-
   .v1 { --bg: linear-gradient(175deg, #29365F, #182142); }
   .v2 { --bg: linear-gradient(175deg, #302A58, #1F1C42); }
   .v3 { --bg: linear-gradient(175deg, #1F4058, #132A3C); }
@@ -507,6 +474,12 @@
     .floor { display: none; }
     .arc { position: static; height: auto; transform: none; display: flex; flex-wrap: wrap; gap: 8px; }
     .panel { position: relative; left: auto; width: calc(50% - 4px); height: 300px; transform: none; }
+    .pflip { transition: none; }
+    .face { backface-visibility: visible; }
+    .face.back { display: none; transform: none; }
+    .arc.flipped .pflip { transform: none; }
+    .arc.flipped .face.front { display: none; }
+    .arc.flipped .face.back { display: flex; }
     .lever { position: fixed; right: 4vw; bottom: 6%; }
     .arc-legend { top: 58px; font-size: 0.72rem; letter-spacing: 0.2em; }
     .spine { font-size: 0.78rem; width: calc(var(--sw, 24px) * 1.2); }
@@ -553,11 +526,6 @@
       <span class="plate"></span>
     </button>
     <div class="arc" id="arc"></div>
-    <div class="lever" id="flip-lever" role="button" tabindex="0" title="翻轉書櫃" aria-label="翻轉書櫃">
-      <span class="slot"></span>
-      <span class="stick"><i class="knob"></i></span>
-      <span class="lever-label">機關</span>
-    </div>
   </div>
 </section>
 
@@ -576,10 +544,10 @@
   <div class="page-inner">
     <button class="back-btn" onclick="showView('view-hall')">← 回到書庫</button>
     <div class="about-wrap">
-      <div class="pearl-badge">絳弦</div>
+      <div class="pearl-badge">泠汐</div>
       <div class="about-text">
-        <p>筆名「絳弦」，一隻棲在深海圖書館裡的海妖，負責替每一冊發光的故事撢灰、點燈。偏愛海的顏色、珍珠的光，還有書頁翻動的聲音。</p>
-        <p>長篇不定期上架新章，短篇隨潮汐入庫。想收到新書消息或交流，歡迎來信：<strong>jiangxian0181@gmail.com</strong></p>
+        <p>筆名「泠汐」，一隻棲在深海圖書館裡的海妖，負責替每一冊發光的故事撢灰、點燈。偏愛海的顏色、珍珠的光，還有書頁翻動的聲音。</p>
+        <p>長篇不定期上架新章，短篇隨潮汐入庫。想收到新書消息或交流，歡迎來信：<strong>hello@example.com</strong></p>
       </div>
     </div>
   </div>
@@ -734,32 +702,36 @@ function makeFiller(seed) {
   return b;
 }
 
-/* 雙面環繞書牆：正面原創區、背面二創區（works.json 中 "zone": "二創" 的作品放背面）
-   12 片書櫃板，各轉 16 度，共約 180 度包圍觀者；作品由右至左、先上層後下層混排 */
+/* 密室旋轉書櫃：半弧形書牆位置不變，12 片書櫃各自原地翻面
+   正面＝原創區、背面＝二創區（works.json 中 "zone": "二創" 的作品放背面）
+   作品由右至左、先上層後下層混排 */
 function buildArc() {
   const arc = document.getElementById("arc");
   arc.innerHTML = "";
   const SEG = 12, STEP = 16;
   const sides = { front: [], back: [] };
-  ["front", "back"].forEach(side => {
-    const wrap = document.createElement("div");
-    wrap.className = "arc-side " + side;
-    for (let p = 0; p < SEG; p++) {
-      const panel = document.createElement("div");
-      panel.className = "panel";
-      const base = (p - (SEG - 1) / 2) * STEP + (side === "back" ? 180 : 0);
-      panel.style.setProperty("--a", base + "deg");
+  for (let p = 0; p < SEG; p++) {
+    const panel = document.createElement("div");
+    panel.className = "panel";
+    panel.style.setProperty("--a", ((p - (SEG - 1) / 2) * STEP) + "deg");
+    panel.style.setProperty("--fd", ((SEG - 1 - p) * 0.06) + "s"); /* 翻面波浪由右至左 */
+    const pflip = document.createElement("div");
+    pflip.className = "pflip";
+    ["front", "back"].forEach(side => {
+      const face = document.createElement("div");
+      face.className = "face " + side;
       const up = document.createElement("div");
       up.className = "level upper";
       const low = document.createElement("div");
       low.className = "level lower";
-      panel.appendChild(up);
-      panel.appendChild(low);
-      wrap.appendChild(panel);
+      face.appendChild(up);
+      face.appendChild(low);
+      pflip.appendChild(face);
       sides[side].push({ up: up, low: low });
-    }
-    arc.appendChild(wrap);
-  });
+    });
+    panel.appendChild(pflip);
+    arc.appendChild(panel);
+  }
 
   /* 書目合併：長篇在前、短篇在後，zone 決定正反面 */
   const catalog = [];
@@ -788,7 +760,7 @@ function buildArc() {
         const lvl = pl[lv];
         const target = 5 - lvl.children.length;
         for (let f = 0; f < target; f++) {
-          const filler = makeFiller(pi * 13 + li * 7 + f * 3 + 2);
+          const filler = makeFiller(pi * 13 + li * 7 + f * 3 + (side === "back" ? 29 : 2));
           lvl.insertBefore(filler, lvl.firstChild);
         }
       });
@@ -816,7 +788,7 @@ let flipped = false;
 const arcEl = document.getElementById("arc");
 let lookTarget = 0, lookCurrent = 0, lookRaf = null;
 function lookStep() {
-  const goal = lookTarget + (flipped ? 180 : 0);
+  const goal = lookTarget;
   lookCurrent += (goal - lookCurrent) * 0.06;
   arcEl.style.transform = "rotateY(" + lookCurrent.toFixed(2) + "deg)";
   if (Math.abs(goal - lookCurrent) > 0.05) {
@@ -835,17 +807,12 @@ if (finePointer && !reduceMotion) {
 
 /* 機關拉桿：翻轉書櫃到另一面 */
 (function () {
-  const lever = document.getElementById("flip-lever");
+  const lever = document.getElementById("shelf-lever");
   const legend = document.getElementById("arc-legend");
   function flip() {
     flipped = !flipped;
     lever.classList.toggle("pulled", flipped);
     arcEl.classList.toggle("flipped", flipped);
-    if (reduceMotion) {
-      arcEl.style.transform = "rotateY(" + (flipped ? 180 : 0) + "deg)";
-    } else {
-      kickLook();
-    }
     setTimeout(() => {
       legend.textContent = flipped ? "✦　二 創 區　✦" : "✦　原 創 區　✦";
     }, reduceMotion ? 0 : 650);
