@@ -10,7 +10,16 @@
         { "name": "貳、願你終能朝向晨曦不羨人", "date": "2026.07.14", "file": "content/opera-02.txt" },
         { "name": "參、祝你慈悲渡人，終為渡己", "date": "2026.07.14", "file": "content/opera-03.txt" },
         { "name": "肆、你應真正掙脫枷鎖自由天地", "date": "2026.07.14", "file": "content/opera-04.txt" },
-        { "name": "伍、放下執念", "date": "2026.07.14", "file": "content/opera-05.txt" }
-      ]
-    }]
-}
+        { "name": "伍、放下執念", "date": "2026.07.14", "file": "content/opera-05.txt" }]
+    },
+    {
+      "title": "暈染黎明的雨",
+      "status": "連載中",
+      "genre": "原向",
+      "blurb": "戀與深空-黎深原向",
+      "chapters": [
+        { "name": "0.1g的砂糖", "date": "2026.07.14","zone": "二創", "file": "content/zayne01.txt" }
+        ]
+    }
+  ]
+}  
