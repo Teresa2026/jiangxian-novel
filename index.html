@@ -99,35 +99,59 @@
   }
   .hero-cta:hover { color: var(--aqua); box-shadow: 0 0 28px rgba(127,222,226,0.5), inset 0 0 16px rgba(127,222,226,0.2); }
 
-  /* ── 珍珠五線譜（簽名元素）── */
-  .staff {
-    position: relative;
-    max-width: 62rem; height: 96px;
-    margin: 3.5rem auto 0;
-    padding: 0 4vw;
+  /* ── 深海書廊（簽名元素）── */
+  header.hero { position: relative; overflow: hidden; }
+  .rays { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .rays i {
+    position: absolute; top: -22%; width: 90px; height: 72%;
+    background: linear-gradient(180deg, rgba(127,222,226,0.15), transparent 82%);
+    transform: rotate(13deg); filter: blur(7px);
+    animation: rayPulse 9s ease-in-out infinite;
   }
-  .staff .lines { position: absolute; inset: 0 4vw; display: flex; flex-direction: column; justify-content: space-between; }
-  .staff .lines i { display: block; height: 1px; background: linear-gradient(90deg, transparent, var(--line) 12%, var(--line) 88%, transparent); }
-  .staff .clef {
-    position: absolute; left: calc(4vw + 6px); top: 50%; transform: translateY(-54%);
-    font-size: 4.2rem; line-height: 1; color: var(--gold);
-    text-shadow: 0 0 14px rgba(212,179,106,0.5);
-    font-family: serif;
+  @keyframes rayPulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+  .hall { position: relative; max-width: 60rem; height: 235px; margin: 3.2rem auto 0; }
+  .arch {
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    border: 1px solid rgba(212,179,106,0.5); border-bottom: none;
+    border-radius: 999px 999px 0 0;
+    box-shadow: 0 0 18px rgba(127,222,226,0.10), inset 0 0 30px rgba(127,222,226,0.06);
   }
-  .staff .note {
-    position: absolute; width: 15px; height: 15px; border-radius: 50%;
-    background: radial-gradient(circle at 32% 28%, #FFFFFF, #D8E6EA 40%, #8FB4C4 75%);
-    box-shadow: 0 0 14px rgba(127,222,226,0.75), 0 0 30px rgba(127,222,226,0.3);
+  .arch.a1 { width: 92%; height: 212px; }
+  .arch.a2 { width: 71%; height: 176px; opacity: 0.8; }
+  .arch.a3 { width: 53%; height: 145px; opacity: 0.62; }
+  .arch.a4 { width: 38%; height: 119px; opacity: 0.46; }
+  .arch.a5 { width: 26%; height: 97px;  opacity: 0.34; }
+  .arch.a6 { width: 17%; height: 80px;  opacity: 0.24; }
+  .hall .floorglow {
+    position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%);
+    width: 70%; height: 30px; border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(127,222,226,0.14), transparent 70%);
+    filter: blur(4px);
+  }
+  .lamp {
+    position: absolute; top: 0;
+    transform-origin: top center;
+    animation: sway 6.5s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+  .lamp::before {
+    content: ""; display: block; width: 1px; margin: 0 auto;
+    height: var(--h, 64px);
+    background: linear-gradient(180deg, transparent, rgba(212,179,106,0.75));
+  }
+  .lamp i {
+    display: block; width: 14px; height: 14px; border-radius: 50%; margin: 0 auto;
+    background: radial-gradient(circle at 35% 30%, #FFFFFF, #D8E6EA 40%, #8FB4C4 75%);
+    box-shadow: 0 0 16px rgba(127,222,226,0.9), 0 0 42px rgba(127,222,226,0.35);
     animation: shimmer 3.2s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
   }
-  .staff .note.violet {
-    background: radial-gradient(circle at 32% 28%, #FFFFFF, #D9CBEF 40%, var(--amethyst) 75%);
-    box-shadow: 0 0 14px rgba(169,139,214,0.75), 0 0 30px rgba(169,139,214,0.3);
+  .lamp.violet i {
+    background: radial-gradient(circle at 35% 30%, #FFFFFF, #D9CBEF 40%, var(--amethyst) 75%);
+    box-shadow: 0 0 16px rgba(169,139,214,0.9), 0 0 42px rgba(169,139,214,0.35);
   }
-  .staff .note::after { /* 符桿 */
-    content: ""; position: absolute; right: -1px; bottom: 55%;
-    width: 1.5px; height: 34px; background: rgba(239,237,230,0.55);
-  }
+  @keyframes sway { 0%, 100% { transform: rotate(2deg); } 50% { transform: rotate(-2deg); } }
   @keyframes shimmer {
     0%, 100% { filter: brightness(1); }
     50%      { filter: brightness(1.45); }
@@ -196,7 +220,7 @@
     box-shadow: 0 0 20px rgba(169,139,214,0.18);
   }
   .story-card h3 { font-size: 1.12rem; letter-spacing: 0.15em; margin-bottom: 0.6rem; }
-  .story-card h3::before { content: "♪ "; color: var(--gold); font-size: 0.9rem; }
+  .story-card h3::before { content: "✦ "; color: var(--gold); font-size: 0.9rem; }
   .story-card p { font-size: 0.88rem; color: var(--pearl-dim); }
   .story-card .meta { margin-top: 1rem; font-size: 0.78rem; color: var(--pearl-dim); letter-spacing: 0.12em; opacity: 0.85; }
 
@@ -256,7 +280,7 @@
     padding: 0.85rem 0.2rem; letter-spacing: 0.08em;
     display: flex; justify-content: space-between; gap: 1rem; align-items: baseline;
   }
-  .toc button .name::before { content: "♪　"; color: var(--aqua); font-size: 0.85rem; }
+  .toc button .name::before { content: "❧　"; color: var(--aqua); font-size: 0.85rem; }
   .toc button:hover { color: var(--aqua); }
   .toc .chap-date { color: var(--pearl-dim); font-size: 0.8rem; }
 
@@ -347,9 +371,10 @@
     .nav-links { gap: 1.1rem; font-size: 0.82rem; }
     .depth-meter { display: none; }
     .sound-btn { padding: 0.1rem 0.6rem; font-size: 0.75rem; }
-    .staff { height: 78px; }
-    .staff .clef { font-size: 3.2rem; }
-    .staff .note::after { height: 26px; }
+    .hall { height: 175px; }
+    .arch.a1 { height: 156px; } .arch.a2 { height: 128px; } .arch.a3 { height: 104px; }
+    .arch.a4 { height: 84px; }  .arch.a5 { height: 68px; }  .arch.a6 { height: 56px; }
+    .lamp::before { height: calc(var(--h, 64px) * 0.7); }
     .about-wrap { flex-direction: column; gap: 1.6rem; }
   }
 </style>
@@ -371,33 +396,42 @@
     <a href="#novels" onclick="closeOverlays()">長篇連載</a>
     <a href="#stories" onclick="closeOverlays()">短篇集</a>
     <a href="#about" onclick="closeOverlays()">關於作者</a>
-    <button class="sound-btn" id="sound-toggle" aria-label="環境音開關" aria-pressed="false">♪ 潮聲</button>
+    <button class="sound-btn" id="sound-toggle" aria-label="環境音開關" aria-pressed="false">≋ 潮聲</button>
   </div>
 </nav>
 
 <main>
 <header class="hero">
-  <p class="eyebrow">海 妖 的 小 說 集</p>
-  <h1>把故事唱給深海聽</h1>
-  <p class="intro">傳說海妖的歌聲能讓人忘了歸途。這裡收藏我寫下的每一首「歌」——長篇如組曲，短篇如單音，都在幽藍的水光裡靜靜發亮，等你側耳。</p>
-  <a class="hero-cta" href="#novels">潛入書海 ♪</a>
+  <div class="rays" aria-hidden="true">
+    <i style="left:16%"></i>
+    <i style="left:45%; animation-delay:3s"></i>
+    <i style="left:73%; animation-delay:6s"></i>
+  </div>
+  <p class="eyebrow">海 妖 的 深 海 藏 書 閣</p>
+  <h1>沉入海底的圖書館</h1>
+  <p class="intro">傳說海妖會把捨不得結束的故事，一冊一冊收進海底的書庫。書頁在水中不會腐朽，只會發光。這裡陳列我寫下的長篇與短篇——燈已點亮，請隨意取閱。</p>
+  <a class="hero-cta" href="#novels">步入書庫 ✦</a>
 
-  <div class="staff" aria-hidden="true">
-    <div class="lines"><i></i><i></i><i></i><i></i><i></i></div>
-    <span class="clef">𝄞</span>
-    <span class="note" style="left:22%; top:18px; animation-delay:0s"></span>
-    <span class="note violet" style="left:33%; top:42px; animation-delay:.5s"></span>
-    <span class="note" style="left:44%; top:30px; animation-delay:1s"></span>
-    <span class="note" style="left:56%; top:54px; animation-delay:1.4s"></span>
-    <span class="note violet" style="left:67%; top:24px; animation-delay:1.9s"></span>
-    <span class="note" style="left:78%; top:44px; animation-delay:2.4s"></span>
-    <span class="note violet" style="left:88%; top:32px; animation-delay:2.8s"></span>
+  <div class="hall" aria-hidden="true">
+    <div class="floorglow"></div>
+    <div class="arch a1"></div>
+    <div class="arch a2"></div>
+    <div class="arch a3"></div>
+    <div class="arch a4"></div>
+    <div class="arch a5"></div>
+    <div class="arch a6"></div>
+    <span class="lamp" style="left:13%; --h:52px; --d:0s"><i></i></span>
+    <span class="lamp violet" style="left:29%; --h:78px; --d:1.1s"><i></i></span>
+    <span class="lamp" style="left:44%; --h:60px; --d:2.3s"><i></i></span>
+    <span class="lamp" style="left:57%; --h:88px; --d:0.6s"><i></i></span>
+    <span class="lamp violet" style="left:71%; --h:64px; --d:1.8s"><i></i></span>
+    <span class="lamp" style="left:86%; --h:74px; --d:2.9s"><i></i></span>
   </div>
 </header>
 
 <section id="novels">
   <div class="section-head">
-    <span class="orn">♫</span>
+    <span class="orn">❖</span>
     <h2>長篇連載</h2>
     <span class="rule"></span>
     <span class="count" id="novel-count"></span>
@@ -407,7 +441,7 @@
 
 <section id="stories">
   <div class="section-head">
-    <span class="orn">♪</span>
+    <span class="orn">✦</span>
     <h2>短篇集</h2>
     <span class="rule"></span>
     <span class="count" id="story-count"></span>
@@ -424,14 +458,14 @@
   <div class="about-wrap">
     <div class="pearl-badge">泠汐</div>
     <div class="about-text">
-      <p>筆名「泠汐」，一隻棲在網路深處的海妖。相信故事和歌一樣，是寫給願意停下來聽的人。偏愛海的顏色、珍珠的光，還有夜裡安靜的旋律。</p>
-      <p>長篇不定期詠唱更新，短篇隨潮汐上岸。想追蹤新歌或交流，歡迎來信：<strong>hello@example.com</strong></p>
+      <p>筆名「泠汐」，一隻棲在深海圖書館裡的海妖，負責替每一冊發光的故事撢灰、點燈。偏愛海的顏色、珍珠的光，還有書頁翻動的聲音。</p>
+      <p>長篇不定期上架新章，短篇隨潮汐入庫。想收到新書消息或交流，歡迎來信：<strong>hello@example.com</strong></p>
     </div>
   </div>
 </section>
 </main>
 
-<footer>© 2026 潮聲書齋 <span class="orn">♪</span> 所有作品皆為原創，轉載請先來信詢問</footer>
+<footer>© 2026 潮聲書齋 <span class="orn">✦</span> 所有作品皆為原創，轉載請先來信詢問</footer>
 
 <!-- 長篇詳細頁 -->
 <div class="overlay" id="detail-overlay" role="dialog" aria-modal="true">
@@ -495,7 +529,7 @@ function renderNovels() {
     card.setAttribute("role", "button");
     card.setAttribute("tabindex", "0");
     card.innerHTML = `
-      <h3><span class="n">♫</span>${n.title}</h3>
+      <h3><span class="n">❖</span>${n.title}</h3>
       <span class="status ${n.status === "已完結" ? "done" : ""}">${n.status}</span>
       <p class="blurb">${n.blurb}</p>
       <p class="meta">${n.genre}　·　共 ${n.chapters.length} 章　·　最近更新 ${n.chapters.length ? n.chapters[n.chapters.length-1].date : "—"}</p>`;
@@ -538,7 +572,7 @@ function openDetail(idx) {
       <p class="blurb">${n.blurb}</p>
     </div>
     <div class="toc">
-      <h3>樂 章 目 錄</h3>
+      <h3>館 藏 目 錄</h3>
       <ol id="toc-list"></ol>
     </div>`;
   const list = inner.querySelector("#toc-list");
@@ -567,7 +601,7 @@ async function openReader(title, sub, file, onBack) {
     <h2 class="reader-title">${title}</h2>
     <p class="reader-sub">${sub}</p>
     <div class="reader-body"><p style="text-indent:0; color:var(--pearl-dim)">正在打撈文字……</p></div>
-    <p class="reader-end"><span class="orn">♪</span>　歌聲暫歇　<span class="orn">♪</span></p>`;
+    <p class="reader-end"><span class="orn">✦</span>　闔卷於此・潮聲仍在　<span class="orn">✦</span></p>`;
   inner.querySelector("#reader-back").addEventListener("click", onBack);
   readerOverlay.classList.add("open");
   document.body.style.overflow = "hidden";
@@ -683,7 +717,7 @@ function closeOverlays() { closeReader(); closeDetail(); }
     master.gain.setTargetAtTime(on ? 1 : 0, ctx.currentTime, 0.8);
     btn.classList.toggle("on", on);
     btn.setAttribute("aria-pressed", on);
-    btn.textContent = on ? "♪ 潮聲・開" : "♪ 潮聲";
+    btn.textContent = on ? "≋ 潮聲・開" : "≋ 潮聲";
   });
 })();
 
