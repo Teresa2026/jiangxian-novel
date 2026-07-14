@@ -453,6 +453,16 @@
   .reader-title { font-size: 1.6rem; letter-spacing: 0.2em; font-weight: 700; margin-bottom: 0.4rem; text-shadow: 0 0 18px rgba(127,222,226,0.4); }
   .reader-sub { color: var(--pearl-dim); font-size: 0.88rem; letter-spacing: 0.15em; margin-bottom: 2.6rem; }
   .reader-body p { font-size: 1.05rem; line-height: 2.2; margin-bottom: 1.6rem; text-indent: 2em; color: #E2E2DC; }
+  .reader-body figure { margin: 2.2rem auto; text-align: center; }
+  .reader-body figure img {
+    max-width: 100%; max-height: 78vh; border-radius: 6px;
+    border: 1px solid rgba(212,179,106,0.45);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 22px rgba(127,222,226,0.12);
+  }
+  .reader-body figcaption {
+    margin-top: 0.7rem; font-size: 0.82rem; letter-spacing: 0.15em;
+    color: var(--pearl-dim);
+  }
   .reader-end { text-align: center; color: var(--pearl-dim); letter-spacing: 0.5em; margin-top: 3.2rem; font-size: 0.85rem; }
   .reader-end .orn { color: var(--gold); }
 
@@ -544,10 +554,10 @@
   <div class="page-inner">
     <button class="back-btn" onclick="showView('view-hall')">← 回到書庫</button>
     <div class="about-wrap">
-      <div class="pearl-badge">絳弦</div>
+      <div class="pearl-badge">泠汐</div>
       <div class="about-text">
-        <p>筆名「絳弦」，一隻棲在深海圖書館裡的海妖，負責替每一冊發光的故事撢灰、點燈。偏愛海的顏色、珍珠的光，還有書頁翻動的聲音。</p>
-        <p>長篇不定期上架新章，短篇隨潮汐入庫。想收到新書消息或交流，歡迎來信：<strong>jiangxian0181@gmail.com</strong></p>
+        <p>筆名「泠汐」，一隻棲在深海圖書館裡的海妖，負責替每一冊發光的故事撢灰、點燈。偏愛海的顏色、珍珠的光，還有書頁翻動的聲音。</p>
+        <p>長篇不定期上架新章，短篇隨潮汐入庫。想收到新書消息或交流，歡迎來信：<strong>hello@example.com</strong></p>
       </div>
     </div>
   </div>
@@ -913,7 +923,15 @@ async function openReader(title, sub, file, backTo, nav) {
     if (!r.ok) throw new Error(r.status);
     const text = await r.text();
     const paras = text.split(/\r?\n+/).map(p => p.trim()).filter(Boolean);
-    inner.querySelector(".reader-body").innerHTML = paras.map(p => "<p>" + escapeHtml(p) + "</p>").join("");
+    const IMG_RE = /^\[(?:圖片|圖|img)[:：]\s*(.+?)\s*(?:[|｜]\s*(.+?)\s*)?\]$/;
+    inner.querySelector(".reader-body").innerHTML = paras.map(p => {
+      const m = p.match(IMG_RE);
+      if (m) {
+        const cap = m[2] ? "<figcaption>" + escapeHtml(m[2]) + "</figcaption>" : "";
+        return '<figure><img src="' + escapeHtml(m[1]) + '" alt="' + escapeHtml(m[2] || "插圖") + '" loading="lazy">' + cap + "</figure>";
+      }
+      return "<p>" + escapeHtml(p) + "</p>";
+    }).join("");
   } catch (e) {
     inner.querySelector(".reader-body").innerHTML =
       '<p style="text-indent:0; color:var(--pearl-dim)">找不到內文檔（' + escapeHtml(file) + '）。請確認 works.json 的 file 路徑與 content 資料夾內的檔名一致。</p>';
